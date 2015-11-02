@@ -1,0 +1,471 @@
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">SearchDS</strong> /
+        <small class="am-text-danger">choose condition</small>
+    </div>
+</div>
+
+<hr>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-1"></div>
+    <div class="col-md-1"><label class="am-form-label am-text-success">App:</label></div>
+    <div class="col-md-2">
+
+        <select class="form-control" ng-click="selectApp()" ng-model="app" ng-options="app.name for app in apps"
+                ng-show="true">
+            <option value=" ">choose app</option>
+        </select>
+
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-1"><label class="am-form-label am-text-success">Type:</label></div>
+    <div class="col-md-2">
+        <select class="form-control" ng-click="selectType()" ng-model="type"
+                ng-show="true">
+            <option ng-repeat="type in types">{{type}}</option>
+        </select>
+
+    </div>
+    <div class="col-md-1">
+        <button class="am-btn am-btn-secondary am-round" ng-click="clearChoose()"><span class="am-icon-eraser"></span>
+            ClearCon
+        </button>
+    </div>
+
+</div>
+
+<hr>
+<br>
+
+<div class="row">
+    <div class="col-xs-1"></div>
+    <div class="col-md-3">
+        <div class="am-btn-toolbar">
+            <div class="am-btn-group am-btn-group-xs">
+                <button type="button" class="am-btn am-btn-secondary am-round" data-toggle="modal"
+                        data-target="#myModal" ng-click="dsOp(null)"><span class="am-icon-plus"></span> New
+                </button>
+                <button type="button" class="am-btn am-btn-warning am-round"><span class="am-icon-trash-o"></span>
+                    Remove
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="am-form-group am-form-icon">
+            <input type="text" class="am-form-field am-round" ng-model="search_con">
+            <i class="am-icon-search"></i>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-1"><label class="am-form-label am-text-warning">OrderBy:</label></div>
+    <div class="col-md-2">
+        <div class="am-form-group">
+            <div class="am-form-group am-form-icon am-success">
+                <select class="form-control" ng-click="selectOrder()" ng-model="orderCon">
+                    <option value="_id">ID</option>
+                    <option value="create_time">CreateTime</option>
+                    <option value="owner_specific_key">OwnerSpecficKey</option>
+                </select>
+                <i class="am-icon-sort"></i>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="am-g">
+    <div class="am-u-sm-12">
+        <form class="am-form">
+            <table class="am-table am-table-striped am-table-radius am-table-hover table-main">
+                <thead>
+                <tr class="am-primary">
+                    <th><input type="checkbox"/></th>
+                    <th>AppName</th>
+                    <th>Type</th>
+                    <th>OwnerSpecificKey</th>
+                    <th>CreateTime</th>
+                    <th>Operation</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="ds in datasources |filter:appFil| filter:typeFil| filter:search_con | orderBy:order">
+                    <td><input type="checkbox"/></td>
+                    <!--<td><a href="#/CreateDS/{{ds._id}}">{{ds._id }}</a></td>-->
+                    <td>{{ds.app_name}}</td>
+                    <td>{{ds.type}}</td>
+                    <td>{{ds.owner_specific_key | captialize}}</td>
+                    <td>{{ds.create_time | date:'yyyy/MM/dd HH:mm:ss.sss'}}</td>
+                    <td>
+                        <div class="am-btn-toolbar">
+                            <div class="am-btn-group am-btn-group-xs">
+                                <button class="am-btn am-btn-secondary am-btn-xs am-text-secondary" data-toggle="modal"
+                                        data-target="#myModal" ng-click="dsOp(ds)"><span
+                                        class="am-icon-pencil-square-o"></span> Edit
+                                </button>
+                                <button class="am-btn am-btn-danger am-btn-xs am-text-danger am-hide-sm-only"
+                                        data-am-modal="{target: '#ds-remove'}" ng-click="sendDS(ds)"><span
+                                        class="am-icon-trash-o"></span> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+
+                </tbody>
+            </table>
+            <div class="am-cf">
+                <h5><label class="am-text-secondary">Total
+                    <mark>{{dsCount}}</mark>
+                    Records</label></h5>
+                <div class="am-fr">
+                    <ul class="am-pagination">
+                        <li class="am-disabled"><a href="#">«</a></li>
+                        <li ng-repeat="num in nums" ng-model="pageNum"><a>{{num}}</a></li>
+                        <li class="am-disabled"><a href="#">》</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>Note:.....</p>
+        </form>
+    </div>
+
+</div>
+
+<hr/>
+
+
+<!-- delete data source modal-->
+
+<div class="am-modal am-modal-alert am-modal-actions-danger" tabindex="-1" id="ds-remove">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">Delete DS</div>
+        <hr>
+        <div class="am-modal-bd">
+            Are you want to delete ds!
+
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm ng-click="removeDS()">确定</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- create or update data source modal-->
+
+<!-- Modal -->
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><label class="am-text-secondary">DataSource Setting</label>
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <br>
+                    <!-- body content start, create or update DS-->
+                    <!-- line1 ds-->
+                    <div class="widget">
+                        <div class="widget-header">Basic Setting</div>
+                        <div class="widget-body">
+                            <div class="row">
+                                <div class="col-md-1"><label class="am-text-secondary">App:</label></div>
+                                <div class="col-md-2" ng-show="isCreate"><select class="form-control"
+                                                                                 ng-click="selectApp()" ng-model="app"
+                                                                                 ng-options="app.name for app in apps"
+                                                                                 ng-show="true">
+                                    <option>choose</option>
+                                </select></div>
+                                <div class="col-md-2" ng-show="!isCreate">
+                                    <labe class="am-text-secondary">{{appName}}</labe>
+                                </div>
+                                <div class="col-md-1"><label class="am-text-secondary">Type:</label></div>
+                                <div class="col-md-2" ng-show="isCreate"><select class="form-control" ng-model="type"
+                                                                                 ng-show="true">
+                                    <option ng-repeat="type in types">{{type}}</option>
+                                </select></div>
+                                <div class="col-md-2" ng-show="!isCreate">
+                                    <labe class="am-text-secondary">{{typeName}}</labe>
+                                </div>
+                                <div class="col-md-3"><label class="am-text-secondary">Owner Specific Key:</label></div>
+                                <div class="col-md-3"><input type="text" class=" form-control col-xs-3 text-success"
+                                                             ng-model="datasource.owner_specific_key"></div>
+                            </div>
+                            <!-- line2 ds-->
+                            <div class="row">
+                                <div class="col-md-2"><label class="am-text-secondary">IsInboundDS:</label></div>
+                                <div class="col-md-1"><input type="checkbox" class="input-sm"
+                                                             ng-model="datasource.is_inbound"></div>
+                                <div class="col-md-2"><label class="am-text-secondary">IsInternalDS:</label></div>
+                                <div class="col-md-1"><input type="checkbox" class="input-sm"
+                                                             ng-model="datasource.is_internal"></div>
+                                <div class="col-md-2"><label class="am-text-secondary">IsRoute:</label></div>
+                                <div class="col-md-1"><input type="checkbox" class="input-sm"
+                                                             ng-model="datasource.is_route"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="hr-stylish-1">
+                    <!-- line3 ds-->
+                    <div class="row">
+                        <div class="col-md-2"><label class="am-text-secondary">Adapter Type:</label></div>
+                        <div class="col-md-3"><select class="form-control input-sm" ng-click="selectAdapterType()"
+                                                      ng-model="datasource.adapter.adapter_type">
+                            <option>XML</option>
+                            <option>Excel</option>
+                            <option>CSV</option>
+                        </select></div>
+                        <div class="col-md-2"><label class="am-text-secondary">With Column Header:</label></div>
+                        <div class="col-md-1"><input type="checkbox" ng-disabled="isExcel"
+                                                     ng-model="datasource.adapter.with_col_header"></div>
+                        <div class="col-md-2"><label class="am-text-secondary">Is Multi-Sheets:</label></div>
+                        <div class="col-md-1"><input type="checkbox" ng-disabled="isExcel"
+                                                     ng-model="datasource.adapter.is_multi_sheets"></div>
+                    </div>
+                    <hr class="hr-stylish-1">
+                    <!-- line4 ds-->
+                    <div class="row">
+                        <div class="col-md-2"><label class="am-text-secondary">Channel Type:</label></div>
+                        <div class="col-md-2">
+                            <select class="form-control input-sm" ng-click="selectChannelType()" ng-model="channelType">
+                                <option value="FTPInbound">FTPInbound</option>
+                                <option value="FTPOutbound">FTPOutbound</option>
+                                <option value="EmailInbound">EmailInbound</option>
+                                <option value="EmailOutbound">EmailOutbound</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-8">
+                            <button class="btn btn-success am-round" type="button" data-toggle="collapse"
+                                    data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"
+                                    ng-disabled="!chooseChannel">
+                                ChannelSetting&nbsp;<i class="am-icon-cog"></i>
+                            </button>
+                            <div class="collapse" id="collapseExample">
+
+                                <!--ftp inbound setting start-->
+                                <div class="well" ng-show="FTPInbound">
+                                    <div class="row">
+                                        <div class="col-md-1"><label class="am-text-secondary">Host:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpInboundChannel.host"></div>
+
+                                        <div class="col-md-2"><label class="am-text-secondary">User:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpInboundChannel.user"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1"><label class="am-text-secondary">Pass:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpInboundChannel.pass"></div>
+
+                                        <div class="col-md-2"><label class="am-text-secondary">ReadPattern:</label>
+                                        </div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpInboundChannel.read_pattern">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1"><label class="am-text-secondary">Dir:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpInboundChannel.dir_path">
+                                        </div>
+
+                                        <div class="col-md-2"><label class="am-text-secondary">Cron_Exp:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpInboundChannel.cron_expression">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--ftp inbound setting end-->
+
+                                <!--ftp outbound setting start-->
+                                <div class="well" ng-show="FTPOutbound">
+                                    <div class="row">
+                                        <div class="col-md-1"><label class="am-text-secondary">Host:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpOutboundChannel.host">
+                                        </div>
+
+                                        <div class="col-md-2"><label class="am-text-secondary">User:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpOutboundChannel.user">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1"><label class="am-text-secondary">Pass:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpOutboundChannel.pass">
+                                        </div>
+
+                                        <div class="col-md-2"><label class="am-text-secondary">WritePattern:</label>
+                                        </div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpOutboundChannel.write_pattern">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1"><label class="am-text-secondary">Dir:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.ftpOutboundChannel.dir_path">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--ftp outbound setting end-->
+
+                                <!--email inbound setting start-->
+                                <div class="well" ng-show="EmailInbound">
+                                    <div class="row">
+                                        <div class="col-md-2"><label class="am-text-secondary">Host:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailInboundChannel.host">
+                                        </div>
+
+                                        <div class="col-md-2"><label class="am-text-secondary">User:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailInboundChannel.user">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2"><label class="am-text-secondary">Pass:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailInboundChannel.pass">
+                                        </div>
+
+                                        <div class="col-md-2"><label class="am-text-secondary">From:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailInboundChannel.from">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2"><label class="am-text-secondary">Cron_Exp:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailInboundChannel.cron_expression">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--email inbound setting end-->
+
+                                <!--email outbound setting start-->
+                                <div class="well" ng-show="EmailOutbound">
+                                    <div class="row">
+                                        <div class="col-md-1"><label class="am-text-secondary">Host:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailOutboundChannel.host">
+                                        </div>
+
+                                        <div class="col-md-3"><label class="am-text-secondary">User:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailOutboundChannel.user">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1"><label class="am-text-secondary">Pass:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailOutboundChannel.pass">
+                                        </div>
+
+                                        <div class="col-md-3"><label
+                                                class="am-text-secondary">EmailBodyTemplate:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailOutboundChannel.email_body_template">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1"><label class="am-text-secondary">SendTo:</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailOutboundChannel.send_to">
+                                        </div>
+                                        <div class="col-md-3"><label class="am-text-secondary">Subject_Template:</label>
+                                        </div>
+                                        <div class="col-md-4"><input type="text" class="form-control col-xs-3"
+                                                                     ng-model="datasource.emailOutboundChannel.subject_template">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--email outbound setting end-->
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <hr class="hr-stylish-1">
+                    <!-- line5 ds-->
+
+                    <div class="row">
+                        <div class="col-md-2"><label class="am-text-secondary">Transform XSLT Name:</label></div>
+                        <div class="col-md-3"><input type="text" class="form-control col-xs-3"
+                                                     ng-model="datasource.transformer.xslt_name"></div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-2"><label class="am-text-secondary">Need Split:</label></div>
+                        <div class="col-md-1"><input type="checkbox" class="input-sm"
+                                                     ng-model="datasource.transformer.need_split"
+                                                     ng-change="needSplit(datasource.transformer.need_split)"></div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><label class="am-text-secondary">Split Number:</label></div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control col-xs-3" ng-disabled="isSplit"
+                                       ng-blur="validateNum()" ng-model="datasource.transformer.split_num">
+
+                                <div class="input-group-addon am-input-sm"><i class="am-icon-{{inputHint}}"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2"><label class="am-text-secondary">NodePath:</label></div>
+                        <div class="col-md-3"><input type="text" class="form-control col-xs-3" ng-disabled="isSplit"
+                                                     ng-model="datasource.transformer.node_path"></div>
+                    </div>
+                    <br>
+
+                    <div class="row">
+
+                        <div class="col-md-2"><label class="am-text-secondary">Transform XSLT File:</label></div>
+                        <div class="col-md-3">
+                            <div class="am-form-group am-form-icon">
+                                <i class="am-icon-cloud-upload"></i>
+                                <input type="file" class="am-form-file" ngf-select ngf-change="upload($files)"
+                                   ng-model="datasource.transformer.xslt"    >
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="am-btn am-btn-success am-round" ng-click="downloadXSLT()">
+                                Download
+                                <i class="am-icon-cloud-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <!-- Create or update combo end-->
+
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearData()">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="confirmDS()">Save changes
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+

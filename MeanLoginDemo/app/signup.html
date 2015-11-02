@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title> SignUp </title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="/css/bootstrap.min.css" type='text/css' />
+	<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" type='text/css' />
+	<link rel="stylesheet" href="/css/bootstrap-theme.min.css" type='text/css' />
+	<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+	<script src="/js/angular.min.js"></script>
+	<script src="/js/angular-route.min.js"></script>
+	<script src="app.js"></script>
+	<script src="/js/controller/controllers.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<div ng-app="meanApp" ng-controller="SignUp" align='center' class="container"> 
+<br>
+<br>
+<br>
+<form class="form-inline">
+<p class="lead"> <h1>{{welcome}} ! Sign Up</h1></p>
+<br>
+<br>
+<br>
+ <div class="col-xs-4">
+ <p><tr><td> Name:</td><td><input type="text" ng-model="user.userName"  ng-change="check()" class="form-control" placeholder="name"></td></tr><span ng-bind="hint"></span><p>
+ <p><tr><td>Password:</td><td><input type="password" ng-model="user.password" class="form-control" placeholder="password"></td></tr><span ng-bind="password"></span></p>
+ <p><tr><td>Email:</td><td><input type="text" ng-model="user.email" class="form-control" placeholder="email"></td></tr><span ng-bind="email"></span></p>
+ <br>
+ </div>
+<p><button ng-click="click()" class="btn btn-primary">sign up</button>&nbsp;&nbsp;&nbsp;&nbsp;<button ng-click="login()" class="btn btn-primary">login</button></p>
+<div ng-show="err" ng-bind="err"></div>
+</form>
+
+</div>
+<table>
+</html>
+

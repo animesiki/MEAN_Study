@@ -1,0 +1,39 @@
+<html>
+<head>
+<title> index </title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="/css/bootstrap.min.css" type='text/css' />
+	<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" type='text/css' />
+	<link rel="stylesheet" href="/css/bootstrap-theme.min.css" type='text/css' />
+	<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+	<script src="/js/angular.js"></script>
+    <script src="/js/angular-route.min.js"></script>
+    <script src="app.js"></script>
+	<script src="/js/controller/controllers.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div ng-app="meanApp" ng-controller="showUser" align='center' class="container"> 
+<hr>
+<div class="jumbotron">
+<tab title="home">
+<p><button ng-click="show()" class="btn btn-primary">showUserList</button></p>
+<table class="table table-striped">
+   <tr>
+   <th>Id</th>
+      <th>name</th>
+      <th>password</th>
+	  <th>email</th>
+   </tr>
+   <tr ng-repeat="user in users" ng-init="id=0" class="success">
+   <td><a href="#/users/{{user._id}}">{{user._id}}</a></td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.password }}</td>
+	   <td>{{ user.email }}</td>
+   </tr>
+</table>
+</tab>
+</div>
+</body>
+</html>
+

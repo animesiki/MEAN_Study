@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Login Page | Amaze UI Example</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/angular-route/angular-route.js"></script>
+    <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="/bower_components/angular-file-upload/ng-file-upload.js"></script>
+    <script src="assets/js/Chart.js"></script>
+    <script src="assets/js/angular-chart.js"></script>
+    <script src="app.js"></script>
+    <script src="js/controller/main.controllers.js"></script>
+    <script src="js/controller/datasource.controller.js"></script>
+    <script src="js/service/services.js"></script>
+    <script src="js/filter/filters.js"></script>
+    <script src="js/directive/directives.js"></script>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body ng-app="webPortalApp" ng-controller="Login">
+
+<div class="header">
+    <div class="am-g">
+        <h1>Web Portal</h1>
+
+        <p>Integrated Config Environment</p>
+    </div>
+    <hr/>
+</div>
+<div class="am-g">
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <h3>Login</h3>
+        <hr>
+        <div class="am-btn-group">
+            <a href="#" class="am-btn am-btn-secondary am-btn-sm"><i class="am-icon-github am-icon-sm"></i> Github</a>
+            <a href="#" class="am-btn am-btn-success am-btn-sm"><i class="am-icon-google-plus-square am-icon-sm"></i>
+                Google+</a>
+            <a href="#" class="am-btn am-btn-primary am-btn-sm"><i class="am-icon-stack-overflow am-icon-sm"></i>
+                stackOverflow</a>
+        </div>
+        <br>
+        <br>
+
+        <form method="post" class="am-form">
+            <label>User:</label>
+
+            <div class="am-form-group am-form-icon ">
+                <i class="am-icon-user"></i>
+                <input type="text" name="" id="email" value="" class="am-form-field am-round am-input-group-sm"
+                       ng-model="user.userName"></div>
+            <br>
+            <label>Pass:</label>
+
+            <div class="am-form-group am-form-icon">
+                <i class="am-icon-lock"></i>
+                <input type="password" name="" id="password" value="" class="am-form-field am-round"
+                       ng-model="user.password"></div>
+            <br>
+            <label for="remember-me">
+                <input id="remember-me" type="checkbox">
+                Remember Pass
+            </label>
+            <br/>
+
+            <div class="am-cf">
+                <button class="am-btn am-btn-secondary am-btn-lg am-round" ng-click="click()">
+                    <i class="am-icon-sign-in"></i>
+                    Login
+                </button>
+
+            </div>
+        </form>
+        <hr>
+        <p>© 2015 DMTPSUPP</p>
+    </div>
+</div>
+
+
+</body>
+</html>
